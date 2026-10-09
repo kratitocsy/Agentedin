@@ -76,7 +76,7 @@ create table audit_events (
   created_at timestamptz not null default now()
 );
 
-create function audit_events_immutable() returns trigger language plpgsql as $$
+create function audit_events_immutable() returns trigger language plpgsql set search_path = public as $$
 begin
   raise exception 'audit_events is append-only';
 end $$;
@@ -92,30 +92,30 @@ alter table evidence     enable row level security;
 alter table consents     enable row level security;
 alter table audit_events enable row level security;
 
-create policy humans_self_read   on humans for select using (id = auth.uid());
-create policy humans_self_update on humans for update using (id = auth.uid()) with check (id = auth.uid());
+create policy humans_self_read   on humans for select using (id = (select auth.uid()));
+create policy humans_self_update on humans for update using (id = (select auth.uid())) with check (id = (select auth.uid()));
 
-create policy agents_self_read   on agents for select using (human_id = auth.uid());
-create policy agents_self_update on agents for update using (human_id = auth.uid())
-  with check (human_id = auth.uid() and trust_level = (select trust_level from agents a where a.id = agents.id));
+create policy agents_self_read   on agents for select using (human_id = (select auth.uid()));
+create policy agents_self_update on agents for update using (human_id = (select auth.uid()))
+  with check (human_id = (select auth.uid()) and trust_level = (select trust_level from agents a where a.id = agents.id));
 
-create policy identities_self_read on identities for select using (human_id = auth.uid());
+create policy identities_self_read on identities for select using (human_id = (select auth.uid()));
 
 -- Evidence: read own; may add/edit/delete own *self-reported* rows only. Verified rows come from the server.
-create policy evidence_self_read   on evidence for select using (human_id = auth.uid());
-create policy evidence_self_insert on evidence for insert with check (human_id = auth.uid() and status = 'self_reported');
-create policy evidence_self_update on evidence for update using (human_id = auth.uid() and status = 'self_reported')
-  with check (human_id = auth.uid() and status = 'self_reported');
-create policy evidence_self_delete on evidence for delete using (human_id = auth.uid());
+create policy evidence_self_read   on evidence for select using (human_id = (select auth.uid()));
+create policy evidence_self_insert on evidence for insert with check (human_id = (select auth.uid()) and status = 'self_reported');
+create policy evidence_self_update on evidence for update using (human_id = (select auth.uid()) and status = 'self_reported')
+  with check (human_id = (select auth.uid()) and status = 'self_reported');
+create policy evidence_self_delete on evidence for delete using (human_id = (select auth.uid()));
 
 -- Consents: read own, grant own, revoke own (revoke = set revoked_at; no delete so history stays).
-create policy consents_self_read   on consents for select using (human_id = auth.uid());
-create policy consents_self_insert on consents for insert with check (human_id = auth.uid());
-create policy consents_self_revoke on consents for update using (human_id = auth.uid())
-  with check (human_id = auth.uid());
+create policy consents_self_read   on consents for select using (human_id = (select auth.uid()));
+create policy consents_self_insert on consents for insert with check (human_id = (select auth.uid()));
+create policy consents_self_revoke on consents for update using (human_id = (select auth.uid()))
+  with check (human_id = (select auth.uid()));
 
 -- Privacy center: humans can read their own audit trail. No insert/update/delete policies = service role only.
-create policy audit_self_read on audit_events for select using (human_id = auth.uid());
+create policy audit_self_read on audit_events for select using (human_id = (select auth.uid()));
 
 revoke all on audit_events from anon, authenticated;
 grant select on audit_events to authenticated;
@@ -138,6 +138,8 @@ begin
   values ('system', new.id, 'human.created', 'human', new.id::text, '{"provider":"github"}');
   return new;
 end $$;
+
+revoke execute on function handle_new_user() from public, anon, authenticated;
 
 create trigger on_auth_user_created
   after insert on auth.users

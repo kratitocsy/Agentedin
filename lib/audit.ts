@@ -1,3 +1,4 @@
+import type { Database, Json } from "@/types/database";
 import { createClient } from "@supabase/supabase-js";
 
 // Server only. audit_events has no insert policy for browser roles; the service key is the sole writer.
@@ -7,9 +8,9 @@ export async function audit(e: {
   action: string;
   entity?: string;
   entityId?: string;
-  details?: Record<string, unknown>;
+  details?: Record<string, Json>;
 }) {
-  const admin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+  const admin = createClient<Database>(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
     auth: { persistSession: false },
   });
   const { error } = await admin.from("audit_events").insert({

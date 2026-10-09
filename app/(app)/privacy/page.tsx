@@ -1,4 +1,7 @@
 import { revalidatePath } from "next/cache";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function Privacy() {
@@ -25,25 +28,25 @@ export default async function Privacy() {
 
   return (
     <>
-      <h1>Privacy center</h1>
+      <h1 className="text-2xl font-semibold">Privacy center</h1>
 
-      <h2>Active consents</h2>
+      <h2 className="mt-6 text-lg font-semibold">Active consents</h2>
       {consents?.length ? consents.map((c) => (
-        <div className="card" key={c.id}>
-          <strong>{c.kind}</strong> <span className="muted">granted {new Date(c.granted_at).toLocaleDateString()}</span>
-          <pre className="muted">{JSON.stringify(c.scope)}</pre>
-          {c.revoked_at ? <span className="badge">Revoked</span> : (
-            <form action={revoke}><input type="hidden" name="id" value={c.id} /><button>Revoke</button></form>
+        <Card className="my-3" key={c.id}>
+          <strong>{c.kind}</strong> <span className="text-sm text-muted-foreground">granted {new Date(c.granted_at).toLocaleDateString()}</span>
+          <pre className="text-sm text-muted-foreground">{JSON.stringify(c.scope)}</pre>
+          {c.revoked_at ? <Badge>Revoked</Badge> : (
+            <form action={revoke}><input type="hidden" name="id" value={c.id} /><Button variant="outline" size="sm">Revoke</Button></form>
           )}
-        </div>
-      )) : <p className="muted">You haven&apos;t shared anything with any company.</p>}
+        </Card>
+      )) : <p className="text-muted-foreground">You haven&apos;t shared anything with any company.</p>}
 
-      <h2>Linked identities</h2>
-      {identities?.map((i) => <div className="card" key={i.id}>{i.provider}: {i.handle} {i.verified && <span className="badge verified">Verified</span>}</div>)}
+      <h2 className="mt-6 text-lg font-semibold">Linked identities</h2>
+      {identities?.map((i) => <Card className="my-3" key={i.id}>{i.provider}: {i.handle} {i.verified && <Badge verified>Verified</Badge>}</Card>)}
 
-      <h2>Activity log</h2>
+      <h2 className="mt-6 text-lg font-semibold">Activity log</h2>
       {events?.map((e) => (
-        <div key={e.id} className="muted">{new Date(e.created_at).toLocaleString()} · {e.actor === "agent" ? "🤖" : e.actor === "human" ? "👤" : "⚙️"} {e.action}</div>
+        <div key={e.id} className="text-sm text-muted-foreground">{new Date(e.created_at).toLocaleString()} · {e.actor === "agent" ? "🤖" : e.actor === "human" ? "👤" : "⚙️"} {e.action}</div>
       ))}
     </>
   );

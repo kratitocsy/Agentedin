@@ -1,12 +1,19 @@
-:root { --fg:#111827; --muted:#6b7280; --line:#e5e7eb; --accent:#2563eb; }
-* { box-sizing: border-box; }
-body { margin:0; font-family: system-ui, sans-serif; color:var(--fg); }
-main { max-width: 760px; margin: 0 auto; padding: 32px 16px; }
-nav { display:flex; gap:16px; padding:16px; border-bottom:1px solid var(--line); }
-a { color: var(--accent); }
-.card { border:1px solid var(--line); border-radius:12px; padding:16px; margin:12px 0; }
-.badge { font-size:12px; padding:2px 8px; border-radius:999px; border:1px solid var(--line); }
-.badge.verified { background:#dcfce7; border-color:#86efac; }
-.muted { color: var(--muted); }
-button { padding:8px 14px; border-radius:8px; border:1px solid var(--line); background:#fff; cursor:pointer; }
-button.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --border: 214 32% 91%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+    --success: 142 76% 90%;
+    --success-foreground: 142 72% 20%;
+  }
+  body { @apply bg-background text-foreground antialiased; }
+  * { @apply border-border; }
+}

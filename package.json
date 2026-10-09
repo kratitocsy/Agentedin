@@ -1,6 +1,6 @@
 {
-  "name": "agentedin-frontend",
-  "version": "0.1.0",
+  "name": "agentedin",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,6 +9,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.47.10",
     "next": "^15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

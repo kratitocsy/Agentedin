@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { revalidatePath } from "next/cache";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -6,7 +7,9 @@ import { createClient } from "@/lib/supabase/server";
 
 export default async function Privacy() {
   const supabase = await createClient();
-  const [{ data: consents }, { data: identities }, { data: events }] = await Promise.all([
+  const { data: { user } } = await supabase.auth.getUser();
+  const [{ data: me }, { data: consents }, { data: identities }, { data: events }] = await Promise.all([
+    supabase.from("humans").select("consent_version, consented_at").eq("id", user!.id).single(),
     supabase.from("consents").select("id, kind, scope, granted_at, expires_at, revoked_at").order("granted_at", { ascending: false }),
     supabase.from("identities").select("id, provider, handle, verified"),
     supabase.from("audit_events").select("id, actor, action, entity, created_at").order("created_at", { ascending: false }).limit(50),
@@ -29,6 +32,15 @@ export default async function Privacy() {
   return (
     <>
       <h1 className="text-2xl font-semibold">Privacy center</h1>
+
+      <h2 className="mt-6 text-lg font-semibold">Privacy policy</h2>
+      <Card className="my-3">
+        {me?.consented_at ? (
+          <p>You accepted the <Link className="text-primary underline" href="/privacy-policy">Privacy Policy</Link> (version {me.consent_version}) on {new Date(me.consented_at).toLocaleDateString()}.</p>
+        ) : (
+          <p className="text-muted-foreground">No acceptance on record.</p>
+        )}
+      </Card>
 
       <h2 className="mt-6 text-lg font-semibold">Active consents</h2>
       {consents?.length ? consents.map((c) => (

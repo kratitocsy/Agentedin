@@ -57,7 +57,7 @@ export async function analyzeSelected(formData: FormData) {
     const bytes: Record<string, number> = {};
     for (const a of authored) for (const [l, b] of Object.entries(a.languages)) bytes[l] = (bytes[l] ?? 0) + b;
     const sum = Object.values(bytes).reduce((x, y) => x + y, 0) || 1;
-    const skills = Object.entries(bytes).sort((x, y) => y[1] - x[1]).slice(0, 6).map(([l, b]) => ({
+    const skills = Object.entries(bytes).filter(([, b]) => b / sum >= 0.03).sort((x, y) => y[1] - x[1]).slice(0, 6).map(([l, b]) => ({
       human_id: user.id, kind: "skill", title: l,
       summary: `${Math.round((b / sum) * 100)}% of code across ${authored.filter((a) => a.languages[l]).length} analyzed repo(s)`,
       source: "github", status: "verified", data: { share: Math.round((b / sum) * 100) },

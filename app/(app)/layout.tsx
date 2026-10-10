@@ -1,9 +1,18 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata = { robots: { index: false, follow: false } };
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default async function AppLayout({ children }: { children: React.ReactNode }) {
+  // New accounts finish onboarding (agent name, avatar, consent) before using the app.
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) {
+    const { data: human } = await supabase.from("humans").select("onboarded_at").eq("id", user.id).single();
+    if (!human?.onboarded_at) redirect("/onboarding");
+  }
   return (
     <>
       <nav className="flex items-center gap-4 border-b p-4">

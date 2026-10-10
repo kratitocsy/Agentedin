@@ -2,7 +2,7 @@ import type { Database } from "@/types/database";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PROTECTED = ["/profile", "/privacy"];
+const PROTECTED = ["/profile", "/privacy", "/onboarding"];
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });

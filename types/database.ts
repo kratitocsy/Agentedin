@@ -8,9 +8,9 @@ export type Database = {
   public: {
     Tables: {
       humans: {
-        Row: { id: string; github_login: string | null; display_name: string | null; photo_url: string | null; email: string | null; whatsapp_e164: string | null; whatsapp_verified_at: string | null; created_at: string };
-        Insert: { id: string; github_login?: string | null; display_name?: string | null; photo_url?: string | null; email?: string | null; whatsapp_e164?: string | null; whatsapp_verified_at?: string | null; created_at?: string };
-        Update: { id?: string; github_login?: string | null; display_name?: string | null; photo_url?: string | null; email?: string | null; whatsapp_e164?: string | null; whatsapp_verified_at?: string | null; created_at?: string };
+        Row: { id: string; github_login: string | null; display_name: string | null; photo_url: string | null; email: string | null; whatsapp_e164: string | null; whatsapp_verified_at: string | null; created_at: string; consent_version: string | null; consented_at: string | null; onboarded_at: string | null };
+        Insert: { id: string; github_login?: string | null; display_name?: string | null; photo_url?: string | null; email?: string | null; whatsapp_e164?: string | null; whatsapp_verified_at?: string | null; created_at?: string; consent_version?: string | null; consented_at?: string | null; onboarded_at?: string | null };
+        Update: { id?: string; github_login?: string | null; display_name?: string | null; photo_url?: string | null; email?: string | null; whatsapp_e164?: string | null; whatsapp_verified_at?: string | null; created_at?: string; consent_version?: string | null; consented_at?: string | null; onboarded_at?: string | null };
         Relationships: [];
       };
       agents: {

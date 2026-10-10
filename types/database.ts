@@ -43,6 +43,12 @@ export type Database = {
         Update: { actor?: string; human_id?: string | null; action?: string; entity?: string | null; entity_id?: string | null; details?: Json; created_at?: string };
         Relationships: [];
       };
+      github_installations: {
+        Row: { installation_id: number; human_id: string; account_login: string; created_at: string };
+        Insert: { installation_id: number; human_id: string; account_login: string; created_at?: string };
+        Update: { installation_id?: number; human_id?: string; account_login?: string; created_at?: string };
+        Relationships: [];
+      };
     };
     Views: { [_ in never]: never };
     Functions: { [_ in never]: never };

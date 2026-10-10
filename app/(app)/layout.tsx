@@ -19,6 +19,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <BrandBar>
         <nav className="flex items-center gap-4 text-sm text-white/80">
           <Link className="hover:text-white" href="/profile">Profile</Link>
+          <Link className="hover:text-white" href="/approvals">Approvals</Link>
+          <Link className="hover:text-white" href="/hunt">Hunt</Link>
+          <Link className="hover:text-white" href="/connect">Connect</Link>
           <Link className="hover:text-white" href="/privacy">Privacy center</Link>
         </nav>
         <form action="/auth/signout" method="post" className="ml-auto">

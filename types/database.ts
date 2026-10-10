@@ -145,9 +145,22 @@ export type Database = {
         Update: { id?: string; match_id?: string; role_id?: string; human_id?: string; company_id?: string; stage?: string; created_at?: string; updated_at?: string };
         Relationships: [];
       };
+      slack_installations: {
+        Row: { team_id: string; company_id: string; bot_token_enc: string; bot_user_id: string | null; installer_user_id: string; created_at: string };
+        Insert: { team_id: string; company_id: string; bot_token_enc: string; bot_user_id?: string | null; installer_user_id: string; created_at?: string };
+        Update: { team_id?: string; company_id?: string; bot_token_enc?: string; bot_user_id?: string | null; installer_user_id?: string; created_at?: string };
+        Relationships: [];
+      };
+      nudge_counters: {
+        Row: { human_id: string; kind: string; last_sent_at: string | null; sent_count: number; paused_until: string | null };
+        Insert: { human_id: string; kind: string; last_sent_at?: string | null; sent_count?: number; paused_until?: string | null };
+        Update: { human_id?: string; kind?: string; last_sent_at?: string | null; sent_count?: number; paused_until?: string | null };
+        Relationships: [];
+      };
     };
     Views: { [_ in never]: never };
     Functions: {
+      verify_cron_secret: { Args: { candidate: string }; Returns: boolean };
       engine_fit_check: { Args: { p_match: string }; Returns: string };
       engine_create_match: { Args: { p_role: string; p_human: string; p_score: number; p_reasons: Json }; Returns: string };
       engine_share_match: { Args: { p_match: string }; Returns: string | null };

@@ -78,12 +78,17 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
           </Card>
         ))
       ) : (
-        <p className="text-sm text-muted-foreground">No evidence yet. Connect Codeforces below. GitHub project analysis is coming next.</p>
+        <p className="text-sm text-muted-foreground">No evidence yet. Connect GitHub projects or Codeforces below.</p>
       )}
 
       {!asCompany && (
         <>
           <h2 className="mt-8 text-lg font-semibold">Add evidence</h2>
+          <Card className="my-3">
+            <h3 className="font-medium">GitHub projects and skills (verified)</h3>
+            <p className="text-sm text-muted-foreground">Choose repos; we count your commits and languages. Read-only, code is never stored.</p>
+            <Button asChild variant="outline" size="sm" className="mt-2"><Link href="/profile/github">Connect GitHub projects</Link></Button>
+          </Card>
           <Card className="my-3">
             <h3 className="font-medium">Codeforces rating (verified)</h3>
             <p className="text-sm text-muted-foreground">Prove the handle is yours and we add your rating as verified.</p>

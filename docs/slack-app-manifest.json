@@ -1,0 +1,29 @@
+{
+  "display_information": {
+    "name": "Agentedin",
+    "description": "Hire through developers' agents. Humans approve every step.",
+    "background_color": "#000000"
+  },
+  "features": {
+    "bot_user": { "display_name": "Agentedin", "always_online": false },
+    "slash_commands": [
+      {
+        "command": "/hire",
+        "url": "https://agentedin-iota.vercel.app/api/slack/commands",
+        "description": "Post roles, find candidates, see your pipeline",
+        "usage_hint": "post | roles | find [n] | shortlist",
+        "should_escape": false
+      }
+    ]
+  },
+  "oauth_config": {
+    "redirect_urls": ["https://agentedin-iota.vercel.app/api/slack/oauth"],
+    "scopes": { "bot": ["chat:write", "commands", "im:write", "users:read", "users:read.email"] }
+  },
+  "settings": {
+    "interactivity": { "is_enabled": true, "request_url": "https://agentedin-iota.vercel.app/api/slack/interactions" },
+    "org_deploy_enabled": false,
+    "socket_mode_enabled": false,
+    "token_rotation_enabled": false
+  }
+}

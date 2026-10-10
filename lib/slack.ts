@@ -71,3 +71,21 @@ export function approvalBlocks(a: { id: string; summary: string; expires_at: str
     },
   ];
 }
+
+// A pipeline entry: the persona card, plus the one action that makes sense at its stage.
+export function pipelineBlocks(entry: CandidateCard & { threadId: string; stage: string; identity?: { name: string | null; email: string | null; github: string | null } }, roleTitle: string) {
+  const blocks = candidateBlocks(entry, roleTitle, entry.stage === "shortlisted") as { type: string; elements?: unknown[] }[];
+  const label: Record<string, string> = {
+    shortlisted: "Shortlisted", interview_requested: "⏳ Waiting for the candidate to approve the interview", interview_confirmed: "✅ Interview confirmed",
+    offer_proposed: "⏳ Offer sent, waiting for the candidate", offer_accepted: "🎉 Offer accepted",
+  };
+  blocks.push({ type: "context", elements: [{ type: "mrkdwn", text: `*Stage:* ${label[entry.stage] ?? esc(entry.stage)}` }] });
+  if (entry.identity) {
+    // Revealed by the candidate's own approval; the database wrote it into this thread only.
+    blocks.push({ type: "section", text: { type: "mrkdwn", text: `*Candidate revealed:* ${esc(entry.identity.name ?? "(no name set)")} · ${esc(entry.identity.email ?? "no email")}${entry.identity.github ? ` · github.com/${esc(entry.identity.github)}` : ""}` } } as never);
+  }
+  if (entry.stage === "interview_confirmed") {
+    blocks.push({ type: "actions", elements: [{ type: "button", style: "primary", text: { type: "plain_text", text: "Propose offer" }, action_id: "propose_offer", value: entry.threadId }] });
+  }
+  return blocks;
+}

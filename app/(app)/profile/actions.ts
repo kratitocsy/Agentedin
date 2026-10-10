@@ -7,13 +7,7 @@ import { z } from "zod";
 import { audit } from "@/lib/audit";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-
-const petName = z
-  .string()
-  .trim()
-  .min(2, "Name must be at least 2 characters")
-  .max(24, "Name must be at most 24 characters")
-  .regex(/^[\p{L}\p{N} _-]+$/u, "Use letters, numbers, spaces, - or _ only");
+import { petName } from "@/lib/validation";
 
 const selfReported = z.object({
   source: z.enum(["leetcode", "resume"]),

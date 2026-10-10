@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { avatarColors } from "@/lib/avatar";
+import { AgentAvatar } from "@/components/agent-avatar";
 import { addSelfReported, deleteEvidence, renameAgent, shuffleAvatar } from "./actions";
 
 export default async function Profile({ searchParams }: { searchParams: Promise<{ preview?: string; error?: string }> }) {
@@ -17,15 +17,11 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
     supabase.from("agents").select("pet_name, avatar_seed, trust_level").eq("human_id", user!.id).single(),
     supabase.from("evidence").select("id, kind, title, summary, source, status").order("created_at", { ascending: false }),
   ]);
-  const [c1, c2] = avatarColors(agent?.avatar_seed ?? "0");
 
   return (
     <>
       <div className="flex items-center gap-4">
-        <svg width="64" height="64" aria-label="agent avatar">
-          <defs><linearGradient id="g"><stop offset="0" stopColor={c1} /><stop offset="1" stopColor={c2} /></linearGradient></defs>
-          <circle cx="32" cy="32" r="30" fill="url(#g)" />
-        </svg>
+        <AgentAvatar seed={agent?.avatar_seed ?? "0000000000000000"} />
         <div>
           <h1 className="text-2xl font-semibold">🤖 {agent?.pet_name}</h1>
           <span className="text-sm text-muted-foreground">

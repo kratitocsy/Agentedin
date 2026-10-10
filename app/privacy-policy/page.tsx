@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandBar } from "@/components/brand-bar";
 
 export const metadata = { title: "Privacy Policy", description: "How Agentedin collects, uses and protects your data." };
 
@@ -11,6 +12,8 @@ const Section = ({ title, children }: { title: string; children: React.ReactNode
 
 export default function PrivacyPolicy() {
   return (
+    <>
+    <BrandBar />
     <main className="mx-auto max-w-2xl px-4 py-10">
       <p className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
         <strong>Draft for the private pilot.</strong> This policy has not yet been reviewed by a lawyer. Items in [brackets] are still to be completed.
@@ -80,5 +83,6 @@ export default function PrivacyPolicy() {
 
       <p className="mt-10"><Link className="text-primary underline" href="/">← Back to Agentedin</Link></p>
     </main>
+    </>
   );
 }

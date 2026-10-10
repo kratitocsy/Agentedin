@@ -2,6 +2,7 @@ import { randomBytes } from "node:crypto";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AgentAvatar } from "@/components/agent-avatar";
+import { BrandBar } from "@/components/brand-bar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
@@ -27,6 +28,8 @@ export default async function Onboarding({ searchParams }: { searchParams: Promi
   const seeds = [agent?.avatar_seed, ...Array.from({ length: 5 }, () => randomBytes(8).toString("hex"))].filter((s): s is string => Boolean(s));
 
   return (
+    <>
+    <BrandBar />
     <main className="mx-auto max-w-2xl px-4 py-10">
       <h1 className="text-3xl font-bold">Welcome to Agentedin</h1>
       <p className="mt-2 text-muted-foreground">Set up your agent in one minute. It represents you with proof of your work, and nothing is shared without your say-so.</p>
@@ -80,5 +83,6 @@ export default async function Onboarding({ searchParams }: { searchParams: Promi
         <Button>Create my agent</Button>
       </form>
     </main>
+    </>
   );
 }

@@ -49,6 +49,12 @@ export type Database = {
         Update: { installation_id?: number; human_id?: string; account_login?: string; created_at?: string };
         Relationships: [];
       };
+      whatsapp_challenges: {
+        Row: { human_id: string; code: string; expires_at: string; created_at: string };
+        Insert: { human_id: string; code: string; expires_at: string; created_at?: string };
+        Update: { human_id?: string; code?: string; expires_at?: string; created_at?: string };
+        Relationships: [];
+      };
     };
     Views: { [_ in never]: never };
     Functions: { [_ in never]: never };

@@ -8,13 +8,21 @@ export const githubAppSlug = () => process.env.GITHUB_APP_SLUG ?? "agentedin";
 
 const b64url = (b: Buffer | string) => Buffer.from(b).toString("base64url");
 
+// Env var UIs mangle multi-line values (newlines become spaces or literal "\n"). Rebuild a valid PEM from whatever arrives.
+export function normalizePem(raw: string) {
+  const m = raw.replace(/\\n/g, "\n").match(/-----BEGIN ([A-Z ]+)-----([\s\S]*?)-----END \1-----/);
+  if (!m) throw new Error("GITHUB_APP_PRIVATE_KEY is not a PEM key");
+  const body = m[2].replace(/\s+/g, "");
+  return `-----BEGIN ${m[1]}-----\n${body.match(/.{1,64}/g)!.join("\n")}\n-----END ${m[1]}-----\n`;
+}
+
 // Short-lived JWT proving we are the app. Signed with the private key, which never leaves the server.
 function appJwt() {
   const now = Math.floor(Date.now() / 1000);
   const input = `${b64url(JSON.stringify({ alg: "RS256", typ: "JWT" }))}.${b64url(
     JSON.stringify({ iat: now - 30, exp: now + 540, iss: process.env.GITHUB_APP_ID }),
   )}`;
-  const key = process.env.GITHUB_APP_PRIVATE_KEY!.replace(/\\n/g, "\n");
+  const key = normalizePem(process.env.GITHUB_APP_PRIVATE_KEY!);
   return `${input}.${b64url(createSign("RSA-SHA256").update(input).sign(key))}`;
 }
 

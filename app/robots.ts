@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 export default function robots(): MetadataRoute.Robots {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://agentedin.in";
   return {
-    rules: { userAgent: "*", allow: "/", disallow: ["/profile", "/privacy", "/auth/"] },
+    rules: { userAgent: "*", allow: "/", disallow: ["/profile", "/privacy", "/approvals", "/hunt", "/connect", "/onboarding", "/api/", "/auth/"] },
     sitemap: `${base}/sitemap.xml`,
   };
 }

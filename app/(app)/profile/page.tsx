@@ -81,6 +81,11 @@ export default async function Profile({ searchParams }: { searchParams: Promise<
         <>
           <h2 className="mt-8 text-lg font-semibold">Add evidence</h2>
           <Card className="my-3">
+            <h3 className="font-medium">WhatsApp number (unlocks trust level 1)</h3>
+            <p className="text-sm text-muted-foreground">Send a one-time code from your WhatsApp. It also lets you message your agent.</p>
+            <Button asChild variant="outline" size="sm" className="mt-2"><Link href="/profile/whatsapp">Verify WhatsApp</Link></Button>
+          </Card>
+          <Card className="my-3">
             <h3 className="font-medium">GitHub projects and skills (verified)</h3>
             <p className="text-sm text-muted-foreground">Choose repos; we count your commits and languages. Read-only, code is never stored.</p>
             <Button asChild variant="outline" size="sm" className="mt-2"><Link href="/profile/github">Connect GitHub projects</Link></Button>
